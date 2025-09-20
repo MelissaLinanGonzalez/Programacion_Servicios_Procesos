@@ -2,7 +2,10 @@ public class EjecutarProceso {
     public static void main(String[] args){
         // Procesos
         //ejemplo1();
-        ejemplo2();
+        //ejemplo2();
+
+        // Hilos
+        ejemplo3();
     }
 
     // Aquí se lanza el proceso de abrir la terminal
@@ -46,7 +49,29 @@ public class EjecutarProceso {
 
             new Contador("Contador 1").run();
             new Contador("Contador 2").run();
-            
+
+            long finSec = System.currentTimeMillis();
+            System.out.println("Tiempo total secuencial: " + (finSec - inicioSec) / 1000.0 + " segundos/n");
+
+            System.out.println(" ");
+            // EJECUCIÓN CONCURRENTE
+            System.out.println("*** Ejecución concurrente (con hilos) ***");
+            long inicioCon = System.currentTimeMillis();
+
+            Contador h1 = new Contador("Contador 1");
+            Contador h2 = new Contador("Contador 2");
+
+            h1.start();
+            h2.start();
+
+            // Esperar a que terminen ambos hilos
+            h1.join();
+            h2.join();
+
+            long finCon = System.currentTimeMillis();
+            System.out.println("Tiempo total concurrente: " + (finCon - inicioCon) / 1000.0 + " segundos/n");
+        } catch (InterruptedException e){
+            e.printStackTrace();
         }
     }
 
