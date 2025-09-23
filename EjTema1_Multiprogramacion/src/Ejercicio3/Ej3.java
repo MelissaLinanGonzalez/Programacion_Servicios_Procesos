@@ -14,6 +14,8 @@ public class Ej3 {
 
         try {
             BufferedReader lector = new BufferedReader(new FileReader(archivo));
+            System.out.println("*** SECUENCIAL ***");
+            long inicioSec = System.currentTimeMillis();
 
             String linea;
             while ((linea = lector.readLine()) != null){
@@ -31,7 +33,33 @@ public class Ej3 {
             System.out.println("INFO: " + info);
             System.out.println("WARN: " + warn);
             System.out.println("ERROR: " + error);
-            
+
+            long finSec = System.currentTimeMillis();
+            System.out.println("Tiempo total secuencial: " + (finSec - inicioSec) / 1000.0 + " segundos/n");
+            lector.close();
+
+            System.out.println("*** CONCURRENTE ***");
+            long inioCon = System.currentTimeMillis();
+            ContarRegistros h1 = new ContarRegistros();
+            ContarInfo h2 = new ContarInfo();
+            ContarWarn h3 = new ContarWarn();
+            ContarError h4 = new ContarError();
+
+            // Se lanzan los hilos
+            h1.start();
+            h2.start();
+            h3.start();
+            h4.start();
+
+            // Se espera a que todos los hilos terminen
+            h1.join();
+            h2.join();
+            h3.join();
+            h4.join();
+
+            long finCon = System.currentTimeMillis();
+            System.out.println("Tiempo total concurrente: " + (finCon - inioCon) / 1000.0 + " segundos/n");
+
         } catch (Exception e){
             System.out.println("Error: " + e.getMessage());
         }
