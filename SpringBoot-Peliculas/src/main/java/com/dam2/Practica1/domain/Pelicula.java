@@ -3,6 +3,7 @@ package com.dam2.Practica1.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "peliculas")
@@ -26,4 +27,20 @@ public class Pelicula {
     private String sinopsis;
 
     private int valoracion;
+
+    @OneToOne
+    @JoinColumn(name = "ficha_id") // FK en la tabla Pelicula que apunta a la PK de la tabla ficha_tecnica
+    private FichaTecnica fichaTecnica;
+
+    @ManyToOne
+    @JoinColumn(name = "director_id") // FK en la tabla Pelicula que apunta a la PK de la tabla director
+    private Director director;
+
+    @ManyToMany
+    @JoinTable(
+            name = "pelicula_actor", // Nombre de la tabla intermedia creada por la relacion N:N
+            joinColumns = @JoinColumn(name = "pelicula_id"), // FK de esta entidad
+            inverseJoinColumns = @JoinColumn(name = "actor_id") // FK de la otra entidad (actores)
+    )
+    private List<Actor> actores;
 }
